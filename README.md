@@ -1,2 +1,2 @@
 # C
-a simple c project to find an array element
+C learning notes
