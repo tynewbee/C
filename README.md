@@ -33,6 +33,7 @@ int main(void)
 
 int binsearch(int x, int v[],int length)
 {
+
 	int i;
 	for (i = 0; i < length; i++)
 	{
@@ -46,6 +47,7 @@ int binsearch(int x, int v[],int length)
 //冒泡排序
 int bubble_sort_arry(int* v, int length)
 {
+
 	int i, j;
 	int n;
 	for (i = 0; i < length; i++)
