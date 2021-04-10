@@ -1,0 +1,30 @@
+//二分法查找有序数组
+//可以对昨天传统查找方式减少计算量
+//对于有序序列的查找，采用二分查找算法减少计算量
+
+int Binary_search(int x, int v[], int length)
+{
+
+	//x待查找的数
+	//v[]有序数组
+	//length 数组长度
+  
+	int half_length;
+	int left=0, right= length - 1;
+
+	while (left <= right)
+	{
+		half_length = (right + left) / 2;
+		if (x == v[half_length] )
+		{
+			return half_length;
+		}
+		else if (x < v[half_length])
+		{
+			right = half_length - 1;			
+		}
+		else
+		{
+			left = half_length + 1;
+		}		
+	}
