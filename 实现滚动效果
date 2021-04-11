@@ -1,0 +1,57 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include <stdio.h>
+#include<Windows.h>
+#include<stdlib.h>
+
+int main(void)
+{
+	char str[] = { "12345                              67890" };//限定' '的个数只能为偶数个
+	int length;
+	int i;
+	int m=0, n=0,y=0;
+	int sz, sr;
+
+
+	length = sizeof(str) / sizeof(str[0]);
+	sz = 0;
+	sr = length - 2;
+	//计算左边有效数的个数，并计算' '的数量
+	for (i = 0; i < length-1; i++)
+	{
+		if (m == 0 && str[i] == ' ')
+		{
+			m = i;
+			n++;
+		}
+		else if (str[i] == ' ')
+			n++;
+
+	}
+	y = length - 1 - m - n;// ' '后面有效数的个数
+	while (n > 0)
+	{
+		//对左边的数进行右移
+		for (i = m; i > 0; i--)
+		{
+			str[i + sz] = str[i + sz - 1];		
+		}
+		str[sz] = ' ';
+		sz++;
+		//对右边的数进行左移
+		for (i =0; i < y; i++)
+		{
+			str[sr - y + i]= str[sr - y + i + 1];
+		}
+		str[sr] = ' ';
+		sr--;
+		n-= 2;
+		system("cls");//清除屏幕
+		printf("%s\n", str);
+		Sleep(1000);//暂停1s
+		
+	}
+	if (!n)
+		printf("     成功会师\n");
+	return 0;
+}
