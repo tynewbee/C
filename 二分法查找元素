@@ -28,3 +28,8 @@ int Binary_search(int x, int v[], int length)
 			left = half_length + 1;
 		}		
 	}
+	if(left > right)
+	{
+		return ;
+	}
+}
