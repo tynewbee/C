@@ -1,0 +1,167 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
+//实现三子棋
+#include<stdio.h>
+int judgement_row(int str[3][3], int row)
+{
+	if ((str[row - 1][0] == str[row - 1][1])&& (str[row - 1][1] == str[row - 1][2]))
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
+int judgement_column(int str[3][3], int column)
+{
+	if ((str[0][column-1] == str[1][column-1])&& (str[1][column - 1] == str[2][column-1]))
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
+int judgement_diagonal(int str[3][3], int row, int column)
+{
+	if ((row+column)==4)
+	{
+		if ((str[0][2] == str[1][1])&& (str[1][1] == str[2][0]))
+			return 1;
+		else
+			return 0;
+	}
+	else
+	{
+		if ((str[0][0] == str[1][1])&&( str[1][1] == str[2][2]))
+			return 1;
+		else
+			return 0;
+	}
+	if (column == 2)
+	{
+		if ((str[0][0] == str[1][1]) && (str[1][1] == str[2][2]))
+			return 1;
+		else
+			return 0;
+	}
+}
+
+int judgement_method(int str[3][3],int row,int column)
+{
+	//1为第一个玩家所走的棋，2位第二个玩家
+	int row_flag = 0;
+	int column_flag = 0;
+	int diagonal_flag = 0;
+	if ((row + column) % 2 == 0)
+	{
+		diagonal_flag = judgement_diagonal(str, row, column);
+		row_flag = judgement_row(str, row);
+		column_flag = judgement_column(str, column);
+	}
+	else
+	{
+		row_flag=judgement_row(str, row);
+		column_flag=judgement_column(str, column);
+	}
+	if (row_flag == 1 || column_flag == 1 || diagonal_flag == 1)
+		return 1;
+	else
+		return 0;
+}
+
+int main(void)
+{
+	//int num[3][3] = { {0,0,0},{0,0,0},{0,0,0} };
+	int num[3][3] = { 0 };
+	int i, j;
+	int flag = 0;
+	int count = 9;
+	int row, column;
+	printf("--------------三子棋游戏-------------\n");
+	printf("-------------------------------------\n");
+	printf("-----玩家1------------------玩家2-----\n");
+	printf("游戏规则：\n");
+	printf("玩家输入您要落子的行和列；例如 2 2 ；代表意思为2行2列落子\n");
+	for (i = 0; i < 3; i++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			printf(" %d ",num[i][j]);
+		}
+		printf("\n");
+	}
+	while (1)
+	{
+
+		printf("请玩家1落子：");
+		scanf("%d%d", &row, &column);
+		while (num[row-1][column-1] > 0)
+		{
+			printf("此地已落子，请重新落子：");
+			scanf("%d%d", &row, &column);
+		}
+		num[row-1][column-1] = 1;
+		if (judgement_method(num, row, column))
+		{
+			for (i = 0; i < 3; i++)
+			{
+				for (j = 0; j < 3; j++)
+				{
+					printf(" %d ", num[i][j]);
+				}
+				printf("\n");
+			}
+			printf("玩家1胜利！  游戏结束");
+			break;
+		}
+		count--;
+		for (i = 0; i < 3; i++)
+		{
+			for (j = 0; j < 3; j++)
+			{
+				printf(" %d ",num[i][j]);
+			}
+			printf("\n");
+		}
+		if (count > 0)
+		{
+			printf("请玩家2落子：");
+			scanf("%d%d", &row, &column);
+			while (num[row - 1][column - 1] > 0)
+			{
+				printf("此地已落子，请重新落子：");
+				scanf("%d%d", &row, &column);
+			}
+			num[row-1][column-1] = 2;
+			if (judgement_method(num, row, column))
+			{
+				for (i = 0; i < 3; i++)
+				{
+					for (j = 0; j < 3; j++)
+					{
+						printf(" %d ", num[i][j]);
+					}
+					printf("\n");
+				}
+				printf("玩家2胜利！  游戏结束");
+				break;
+			}
+			count--;
+			for (i = 0; i < 3; i++)
+			{
+				for (j = 0; j < 3; j++)
+				{
+					printf(" %d ",num[i][j]);
+				}
+				printf("\n");
+			}
+		}
+		else
+		{
+			printf("平手。  游戏结束");
+			break;
+		}
+	}
+
+
+	return 0;
+}
