@@ -1,0 +1,38 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include <stdio.h>
+//不额外定义变量交换两个数据
+int main()
+{
+	int a = 15, b = 3;
+	int str[] = { 1,2,3,4,1,2,3,4,5 };
+	printf("%d %d \n", a, b);
+	b = a + b;
+	a = b - a;
+	b = b - a;
+	printf("%d %d \n", a, b);
+	//这种方法存在一种问题，当数非常大的时候做加法可能会溢出
+	//所以可以采用位运算来实现
+	/*
+	a=b^a;
+	b=b^a;
+	a=b^a;
+	*/
+	//这种代码可读性差
+
+	printf("%d ", find_alone(str, sizeof(str) / sizeof(str[0])));
+	return 0;
+}
+
+// ^ 的运用
+//找出单身狗
+int find_alone(int* str, int length)
+{
+	int num = str[0];
+	int i;
+	for (i = 1; i < length; i++)
+	{
+		num ^= str[i];
+	}
+	return num;
+}
