@@ -28,7 +28,14 @@ int sum_bide1_2(int num)
 	}
 	return count;
 }
-
+//该方法的应用
+//统计两个数二进制之间不同的位数
+int cal_bide_diff(int a, int b)
+{
+	int c; 
+	c = a ^ b;
+	return sum_bide1_2(c);
+}
 int main()
 {
 
