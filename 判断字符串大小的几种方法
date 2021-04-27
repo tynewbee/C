@@ -1,4 +1,6 @@
 1、使用库函数strlen
+
+
 2、int get_string_length(char* str)
 {
 	char* head = str;
@@ -9,6 +11,8 @@
 	}
 	return bottom - head;
 }
+
+
 3、int get_string_length(char* str)
 {
 	int count=0;
