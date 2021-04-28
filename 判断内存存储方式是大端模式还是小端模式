@@ -1,0 +1,17 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include<stdio.h>
+
+int main()
+{
+
+//判断内存存储方式是大端模式还是小端模式
+	int a = 0x112233b4;
+	unsigned char* pr = &a;
+	printf("%x\n",*pr);
+	if (*pr == (a & 0xff))
+		printf("小端模式");
+	else
+		printf("大端模式");
+	return 0;
+}
