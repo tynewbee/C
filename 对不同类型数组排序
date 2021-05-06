@@ -1,0 +1,60 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdlib.h>
+
+#include<stdio.h>
+struct Stu {
+	char name[20];
+	int age;
+};
+
+void swap(char* e1, char* e2, int size)//按字节交换俩地址的元素
+{
+	int i = 0;
+	char tmp;
+	for (i = 0; i < size; i++)
+	{
+		tmp = *(e1+i);
+		*(e1+i) = *(e2+i);
+		*(e2+i) = tmp;
+	}
+}
+void my_sort(void* arr, int length, int size, int(*pa)(const void*, const void*))//采用冒泡排序对不同类型的数组进行排序
+																				//通过调用不同的比较方法对不同数据类型进行比较
+																				//参数传递的时候声明空类型，数组大小，每个元素存储所占字节数目
+{
+	int i, j;
+	
+	for (i = 0; i < length - 1; i++)
+	{
+		for (j = 0; j < length - i - 1; j++)
+		{
+			if (pa((char*)arr+j*size, (char*)arr + (j+1)*size)>0)//精髓
+			{
+				swap((char*)arr + j * size, (char*)arr + (j + 1)*size, size);
+			}
+			
+		}
+	}
+}
+int cmp_Int(const void* e1, const void* e2)//不同的调用方法
+{
+	return *((int*)e1)- *((int*)e2);
+}
+int cmp_stu_age(const void* e1, const void* e2)
+{
+	return ((struct Stu*)e1)->age - ((struct Stu*)e2)->age;
+}
+
+int main()
+{
+
+	struct Stu s[3] = { {"zhangsan",20},{"lisi",30},{"wangwu",10} };
+	int sz = sizeof(s) / sizeof(s[0]);
+	int arr[5] = { 5,2,3,1,4 };
+	//qsort(s,sz,sizeof(s[0]),cmp_stu_age);
+
+	my_sort(s, sz, sizeof(s[0]), cmp_stu_age);
+	my_sort(arr, 5, sizeof(arr[0]), cmp_Int);
+	return 0;
+	
+}
