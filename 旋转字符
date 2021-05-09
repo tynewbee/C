@@ -1,0 +1,62 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+//旋转k个字符
+//暴力求解法，一个个的挪
+void left_move(char* s, int k)
+{
+	int i;
+	char tmp;
+	char *p=NULL;
+	for (i = 0; i < k; i++)
+	{
+		p = s;
+		tmp = *p;
+		while (*(p+1) != '\0')
+		{
+			*p = *(p+1);
+			p++;
+		}
+		*p = tmp;
+	}
+}
+
+void reverse(char* s,int length)
+{
+	char* p_head;
+	char* p_bott;
+	char tmp;
+	p_head = s;
+	p_bott = s + length-1;
+	while (p_head < p_bott)
+	{
+		tmp = *p_head;
+		*p_head = *p_bott;
+		*p_bott = tmp;
+		p_head++;
+		p_bott--;
+	}
+}
+//三步翻转法
+//1、ab cdef,2、ba fedc, 3、cdef ab
+void move_thr(char* s, int k, int length)
+{
+	assert(k <= length);
+	reverse(s, k);
+	reverse(s+k, length - k);
+	reverse(s, length);
+}
+int main()
+{
+
+	char arr[] = "abcdef";
+
+	//left_move(arr, 2);
+	move_thr(arr, 5, strlen(arr));
+	printf("%s\n", arr);
+
+
+	return 0;
+}
