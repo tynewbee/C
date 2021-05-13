@@ -1,0 +1,146 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+//1、strlen函数的模拟实现
+//采用计数方法
+int my_strlen_1(const char* arr)
+{
+	int count=0;
+	assert(arr);
+	while (*arr != '\0')
+	{
+		arr++;
+		count++;
+	}
+	return count;
+}
+//采用递归方法
+int my_strlen_2(const char* arr)
+{
+	
+	assert(arr);
+	
+	while (*arr != '\0')
+	{
+		arr++;
+		return (1+my_strlen_2(arr));
+	}
+	return 0;
+}
+
+//2、strcpy的模拟实现
+char* my_strcpy(char* arr1, const char* arr2)
+{
+	assert(arr1);
+	assert(arr2);
+	char* ret;
+	ret = arr1;
+	//将arr2的内容包括'\0'拷贝至arr1里面
+	while (*arr2 != '\0')
+	{
+		*arr1 = *arr2;
+		arr2++;
+		arr1++;
+	}
+	*arr1 = *arr2;
+	//返回目标空间的首元素地址
+	return ret;
+}
+
+
+//3、strcat的模拟实现
+char* my_strcat(char* arr1, const char* arr2)
+{
+	assert(arr1);
+	assert(arr2);
+	char* ret=arr1;
+	while (*arr1 != '\0')//先找到目标字符串的'\0'
+		arr1++;
+	while (*arr2 != '\0')//将字符串拷贝值目标函数末尾
+	{
+		*arr1 = *arr2;
+		arr1++;
+		arr2++;
+	}
+	*arr1 = *arr2;//将'\0'也给目标字符串
+	return ret;
+}
+
+//4、strcmp的模拟实现
+int my_strcmp(const char* arr1,const char* arr2)
+{
+	assert(arr1);
+	assert(arr2);
+	while (1)
+	{
+		if (*arr1 == '\0'&& *arr2 == '\0')
+		{
+			return 0;
+		}
+		else if (*arr1 == *arr2)
+		{
+			arr1++;
+			arr2++;
+		}
+		else if (*arr1 > *arr2)
+			return *arr1 - *arr2;
+		else
+			return *arr1 - *arr2;
+	}
+}
+
+//5、strstr的模拟现实
+//arr1被查找的字符串，arr2查找的子串
+const char* my_strstr(const char* arr1, const char* arr2)
+{
+	assert(arr1);
+	assert(arr2);
+	const char*pa = arr1;
+	const char*pb = arr2;
+
+	if (*arr1 == '\0')//规定如果查找空字符，返回原字符串
+		return arr1;
+
+	while (*arr1 != '\0')
+	{
+		while (*pb != '\0'&&*pa != '\0')
+		{
+			if (*pa == *pb)//逐个比较
+			{
+				pa++;
+				pb++;
+			}
+			else
+				break;
+		}
+
+		if (*pb == '\0')
+			return arr1;//返回字符串子串首元素地址
+		if (*pa == '\0')//避免进行不必要的计算
+			return NULL;
+		arr1++;
+		pa = arr1;
+		pb = arr2;
+	}
+	return NULL;
+}
+//实现各种字符串函数
+int main()
+{
+	char arr[20] = "abcd";
+	char arr2[8]="abcedf";
+	const char* ret=NULL;
+	ret = my_strstr(arr, arr2);
+	if (ret == NULL)
+	{
+		printf("没找到\n");
+	}
+	else
+	{
+		printf("%s\n",ret);
+	}
+
+	
+	return 0;
+}
