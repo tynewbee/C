@@ -36,6 +36,40 @@ void my_sort(void* arr, int length, int size, int(*pa)(const void*, const void*)
 		}
 	}
 }
+
+void* my_memcpy(void* arr1, const void* arr2, int size)
+{
+	assert(arr1&&arr2);
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		*((char*)arr1+ i)  = *((char*)arr2 + i);
+	}
+	return arr1;
+}
+
+void* my_memmove(void* arr1, const void* arr2, int size)
+{
+	assert(arr1&&arr2);
+	int i;
+	if (arr1 < arr2)//从前往后拷贝
+	{
+		for (i = 0; i < size; i++)
+		{
+			*((char*)arr1 + i) = *((char*)arr2 + i);
+		}
+	}
+	else//从后往前拷贝
+	{
+		for (i = size-1; i >=0; i--)
+		{
+			*((char*)arr1 + i) = *((char*)arr2 + i);
+		}
+	}
+	return arr1;
+}
+
+
 int cmp_Int(const void* e1, const void* e2)//不同的调用方法
 {
 	return *((int*)e1)- *((int*)e2);
@@ -44,6 +78,7 @@ int cmp_stu_age(const void* e1, const void* e2)
 {
 	return ((struct Stu*)e1)->age - ((struct Stu*)e2)->age;
 }
+
 
 int main()
 {
