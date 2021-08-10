@@ -1,0 +1,173 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include<address_fuc.h>
+
+void InitMem(struct PeoNum* pa)
+{
+	assert(pa);//判断是否为无效指针
+	memset(pa, 0, sizeof(struct PeoNum));//初始化内存
+
+}
+
+struct PeoNum*  GetNewPeopleInfo(struct PeoNum* pa)
+{
+
+	assert(pa);//判断是否为无效指针
+
+	if (pa->size < MAX_USER)//判断是否超出范围
+	{
+		(pa->size)++;
+	}
+	else
+	{
+		printf("用户超出范围\n");
+		return pa;
+	}
+	pa->Peo = (struct PeopleIno*)realloc(pa->Peo, (pa->size) * sizeof(struct PeopleIno));//根据用户数量开辟空间
+	if (pa->Peo == NULL)
+	{
+		return NULL;
+	}
+	printf("请输入姓名：\n");
+	scanf("%s", pa->Peo[pa->size - 1].name);
+	printf("请输入性别：\n");
+	scanf("%s", pa->Peo[pa->size - 1].sex);
+	printf("请输入年龄：\n");
+	scanf("%d", &(pa->Peo[pa->size - 1].age));
+	printf("请输入电话：\n");
+	scanf("%s", pa->Peo[pa->size - 1].tel);
+
+	printf("增加成功!!!\n");
+
+	return pa;
+}
+
+void DeletPeopleInfo(struct PeoNum* pa)
+{
+
+	assert(pa);//判断是否为无效指针
+	char s[20] = {0};
+	int i,j;
+	if (pa->size == 0)
+	{
+		printf("无数据可删\n");
+		return;
+	}
+	printf("请输入要删除的名字：\n");
+	scanf("%s", s);
+	for (i = 0; i < pa->size; i++)
+	{
+		if (strcmp(pa->Peo[i].name, s) == 0)
+			break;
+	}
+	if (i == pa->size)
+	{
+		printf("没有这个用户信息\n");
+		return;
+	}
+	for (j = i; j < (pa->size)-1; j++)
+	{
+		strcpy(pa->Peo[j].name, pa->Peo[j + 1].name);
+		strcpy(pa->Peo[j].sex, pa->Peo[j + 1].sex);
+		strcpy(pa->Peo[j].tel, pa->Peo[j + 1].tel);
+		pa->Peo[j].age = pa->Peo[j + 1].age;
+	}
+	(pa->size)--;
+	printf("删除成功!!!\n");
+}
+
+
+void SearchPeopleInfo(struct PeoNum* pa)
+{
+	assert(pa);//判断是否为无效指针
+	char s[20] = { 0 };
+	int i;
+	printf("请输入要删除的名字：\n");
+	scanf("%s", s);
+	for (i = 0; i < pa->size; i++)
+	{
+		if (strcmp(pa->Peo[i].name, s) == 0)
+			break;
+	}
+	if (i == pa->size)
+	{
+		printf("没有这个用户信息\n");
+		return;
+	}
+	printf("%-15s%-10s%-10s%-12s\n", "姓名", "性别", "年龄", "手机号");
+	printf("%-15s%-10s%-10d%-12s\n", pa->Peo[i].name, pa->Peo[i].sex, pa->Peo[i].age, pa->Peo[i].tel);
+}
+
+
+void PrintAddBook(const struct PeoNum* pa)
+{
+	assert(pa);//判断是否为无效指针
+	int i;
+	if (pa->size == 0)
+	{
+		printf("该通讯录为空，请添加成员\n");
+		return;
+	}
+	printf("%-15s%-10s%-10s%-12s\n", "姓名", "性别", "年龄", "手机号");
+	for (i = 0; i < pa->size; i++)
+	{
+		printf("%-15s%-10s%-10d%-12s\n", pa->Peo[i].name, pa->Peo[i].sex, pa->Peo[i].age, pa->Peo[i].tel);
+	}
+}
+
+
+void Destroy(struct PeoNum* pa)
+{
+	free(pa->Peo);
+	pa->Peo = NULL;
+	free(pa);
+	pa = NULL;
+}
+
+
+void Excute(struct PeoNum* pa)
+{
+
+	assert(pa);//判断是否为无效指针
+	int GetNum=1;
+
+	InitMem(pa);//初始化
+
+	do
+	{
+		Menu();
+		printf("请输入你想执行的功能：\n");
+		scanf("%d", &GetNum);
+		switch (GetNum)
+		{
+		case EXIT:
+			printf("成功退出!!!\n");
+			break;
+		case DISPLAY:
+			PrintAddBook(pa);
+			break;
+		case ADDINFO:
+			GetNewPeopleInfo(pa);
+			break;
+		case DELET:
+			DeletPeopleInfo(pa);
+			break;
+		case SEARCH:
+			SearchPeopleInfo(pa);
+			break;
+		default:
+			printf("输入错误，请重新输入\n");
+			break;
+		}
+	} while (GetNum);
+
+	Destroy(pa);
+}
+
+void Menu(void)
+{
+	printf("*****************************************\n");
+	printf("****************通讯录*******************\n");
+	printf("*****************************************\n");
+	printf("-----------0退出--1打印--2添加-----------\n");
+	printf("-----------3删除--4查找------------------\n");
+}
