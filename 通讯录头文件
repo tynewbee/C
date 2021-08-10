@@ -1,0 +1,49 @@
+//#pragma once
+#ifndef ADDRESS_FUC
+#define ADDRESS_FUC
+
+
+#include<stdio.h>
+#include<string.h>
+#include<assert.h>
+#include<stdlib.h>
+
+#define MAX_USER	1000			//最大用户数量
+#define NAME_MAX	20
+#define SEX_MAX		5
+#define TEL_MAX		11
+
+struct PeopleIno
+{
+	char name[NAME_MAX];
+	char sex[SEX_MAX];
+	int age;
+	char tel[TEL_MAX];
+};
+
+struct PeoNum
+{
+	int size;
+	struct PeopleIno *Peo;
+};
+
+enum Chose
+{
+	EXIT,
+	DISPLAY,
+	ADDINFO,
+	DELET,
+	SEARCH
+	
+};
+
+void Menu(void);//菜单
+void InitMem(struct PeoNum* pa);//初始化内存空间
+struct PeoNum* GetNewPeopleInfo(struct PeoNum* pa);//添加新的成员
+void DeletPeopleInfo(struct PeoNum* pa);//删除成员
+void SearchPeopleInfo(struct PeoNum* pa);//寻找成员
+void PrintAddBook(const struct PeoNum* pa);//打印通讯录
+void Excute(struct PeoNum* pa);//执行用户输入操作
+void Destroy(struct PeoNum* pa);//销毁通讯录
+
+#endif // !ADDRESS_FUC
