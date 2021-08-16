@@ -1,0 +1,106 @@
+对于数组，在C99标准下是可以创建边长数组的
+但不是任何编译器都支持这个标准的
+
+
+栈区上方有一个内核区
+静态区（数据段）下面还有一个代码段（常量区）（存放二进制代码和常量）
+动态内存分配开辟的空间在堆区
+全局变量和全局静态变量的区别：全局变量所有文件可见（其他文件调用可以extern），静态变量当前文件可见
+1、malloc和free
+
+void* malloc (size_t size);
+void* free(void* ptr);
+输入需求的字节数，返回值为void* 类型
+int* p = （int*）malloc（10*sizeof（int））；
+开辟40个字节的内存空间
+如果申请的空间内存无法满足，即超出范围，返回NULL，并且我们还可以查看错误码
+
+空间使用完毕后，调用free函数释放空间，但是此时p所指向的地址并没有改变，所以为了防止通过p继续操作该内存空间，需要将p指向空值
+free（p）；
+p=NULL；
+
+注意：free只能释放动态开辟的空间。
+频繁使用malloc会使得内存碎片化。
+
+2、calloc
+
+void* calloc (size_t num, size_t size);
+
+ 输入为元素个数num，每个元素大小size
+他在分配空间的时候，会默认把空间初始化为0.
+malloc比calloc效率稍微高一点
+
+3、realloc
+调整动态内存开辟大小
+void* realloc (void* ptr, size_t size);
+ptr是之前开辟的动态内存的地址，size是重新想要的空间大小、
+如果ptr指向的空间之后有足够的内存空间则直接从尾部追加，否则重新开辟一块新内存，并把之前内存的数据拷贝过来，然后释放之前开辟的内存。最后返回开辟内存的地址。
+如果没有足够的内存，返回NULL
+int* p= realloc (NULL, 40);此时的效果和malloc一样
+连续的内存空间会使得内存利用率高
+
+
+4、常见的错误
+
+1）对空指针的解引用
+开辟了一块内存就直接使用，并没有判断是否开辟成功。
+
+2）对动态开辟内存的越界访问
+
+3）对非动态内存的释放
+
+4）使用free释放动态开辟内存的一部分，并没有从头开始释放内存
+
+5）对同一块空间多次释放
+如何避免？释放后将指针置为空指针
+
+6）对动态开辟内存忘记释放（内存泄漏）
+例子：
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+void getmem(char *p)
+{
+	p = (char*)malloc(400);
+}
+void test(void)
+{
+	char* str = NULL;
+	getmem(str);
+	strcpy(str, "abcdef");
+	printf(str);
+}
+int main()
+{
+	test();
+	
+	return 0;
+}
+一个错误的代码
+错误原因：1、存在内存泄漏
+2、代码并没有修改str的值，strcpy还是对NULL地址进行访问
+要想拷贝abcdef，可以吧str的地址传过去，形参定义一个二级指针
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+void getmem(char **p)
+{
+	*p = (char*)malloc(400);
+}
+void test(void)
+{
+	char* str = NULL;
+	getmem(&str);
+	strcpy(str, "abcdef");
+	printf(str);
+	free(str);
+	str = NULL;
+}
+int main()
+{
+	test();
+	
+	return 0;
+}
