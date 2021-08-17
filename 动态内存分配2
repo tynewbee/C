@@ -1,0 +1,69 @@
+5、柔性数组
+在C99中，结构体中的最后一个元素元素允许是未知大小的数组。
+例如：
+struct TEXT
+{	
+	int age;
+	int arr[0];
+};
+此时arr就是一个柔性数组
+此时就可以动态开辟内存来控制arr[]的大小。
+#include <stdio.h>
+struct str {
+	int len;
+	char s[0];
+};
+
+int main() {
+	
+	printf("%d\n", sizeof(struct str));
+	return 0;
+}
+此时输出的的值为4，意思就是说s 此时不占用内存，如果用malloc分配内存，内存连续。但是如果用指针来代替柔性数组则输出是8，此时如果用malloc分配内存，内存将会不连续，指针存储的是剩余开辟空间的地址，他指向这块空间
+
+或者这样实现
+struct message
+{	
+	int age;
+	char sex[5];
+	char num[10];
+};
+struct stu
+{
+	int size;
+	struct message *arr;
+};
+
+char test(void)
+{
+	
+	struct stu *pa=(struct stu*)calloc(1,sizeof(struct stu));
+	if (pa == NULL)
+		return 0;
+	pa->arr = (struct message*)calloc(5 ,sizeof(struct message));
+	if (pa->arr == NULL)
+		return 0;
+	//..........
+	free(pa->arr);
+	pa->arr = NULL;
+	free(pa);
+	pa = NULL;
+	
+
+	return 0;
+}
+柔性数组的特点：
+1、结构体中的柔性数组成员前面至少一个其他成员。
+2、sizeof返回的这种结构大小不包括柔性数组的内存。
+3、包含柔性数组成员的结构用malloc函数进行内存的动态分配，并且分配的内存应该大于结构的大小，以适应柔性数组的预期大小。
+
+有些情况可以使用typedef struct来声明结构体以适应不同的编译器。
+
+柔性数组的好处：
+1、方便内存释放
+如果采用指针的方式则需要释放两次内存空间，而柔性数组只需要释放一次。
+对于开发者，有可能会忘记释放结构体成员指针指向的内存空间，容易出现bug
+2、有利于访问速度，减少内存碎片
+
+C语言结构体里的成员数组和指针 | 酷 壳 - CoolShell
+可以参考这篇文章，讲的很好
